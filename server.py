@@ -95,12 +95,7 @@ def main():
         if st.button(f"Generate {method_name}", key=f"btn_{method_name}"):
             st.write("Output:", method_func(user_input))
 
-      # Apply All Normalization Methods
-    st.header("Full Text Normalization")
-    full_text_input = st.text_area("Enter text to normalize fully", "", key="full_normalization")
-    if st.button("Normalize Text", key="btn_full_normalization"):
-        normalized_output = normalize_text(full_text_input)
-        st.write("Final Normalized Output:", normalized_output)
+    
     
     # Soundex Normalization
     st.header("Soundex Normalization")
@@ -109,6 +104,21 @@ def main():
         words = soundex_input.split()
         soundex_output = ' '.join([soundex(word) for word in words])
         st.write("Output:", soundex_output)
+
+      # Apply All Normalization Methods
+    st.header("Full Text Normalization")
+    uploaded_file = st.file_uploader("Upload a .txt file for Complete Regex Normalisation", type=["txt"], key="normalised_file")
+    if uploaded_file is not None and st.button("Generate Normalised File", key="btn_regex"):
+        file_path = "regex_normalised_output.txt"
+        text = uploaded_file.read().decode("utf-8")
+        regex_text = normalize_text(text)
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(regex_text)
+        # Display a preview (first 500 characters or entire text if small)
+        st.subheader("Preview of Normalised Text:")
+        st.text_area("Normalized Output", regex_text[:500] + ("..." if len(regex_text) > 500 else ""), height=200)
+
+        st.download_button("Download Normalised Text", data=regex_text, file_name=file_path, mime="text/plain")
     
     # Metaphone Normalization with File Upload
     st.header("Metaphone Normalization")
@@ -119,6 +129,11 @@ def main():
         metaphone_text = normalize_with_metaphone(text)
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(metaphone_text)
+        
+        # Display a preview (first 500 characters or entire text if small)
+        st.subheader("Preview of Normalised Text:")
+        st.text_area("Normalized Output", metaphone_text[:500] + ("..." if len(metaphone_text) > 500 else ""), height=200)
+
         st.download_button("Download Metaphone Text", data=metaphone_text, file_name=file_path, mime="text/plain")
     
   
