@@ -67,10 +67,17 @@ def normalize_with_metaphone(text):
     words = text.split()
     return ' '.join([doublemetaphone(word)[0] for word in words])
 
+def normalize_text(text):
+    text = normalize_punctuation(text)
+    text = normalize_accents(text)
+    text = normalize_contractions(text)
+    text = normalize_language_variations(text)
+    text = normalize_stopwords(text)
+    text = normalize_lemmatization(text)
+    return text
+
 def main():
-    st.title("Text Normalization App")
-    
-    st.header("Normalization Methods")
+    st.title("Text Normalization ")
     
     methods = {
         "Normalize Punctuation": normalize_punctuation,
@@ -86,6 +93,13 @@ def main():
         user_input = st.text_area(f"Enter text for {method_name}", "", key=method_name)
         if st.button(f"Generate {method_name}", key=f"btn_{method_name}"):
             st.write("Output:", method_func(user_input))
+
+      # Apply All Normalization Methods
+    st.header("Full Text Normalization")
+    full_text_input = st.text_area("Enter text to normalize fully", "", key="full_normalization")
+    if st.button("Normalize Text", key="btn_full_normalization"):
+        normalized_output = normalize_text(full_text_input)
+        st.write("Final Normalized Output:", normalized_output)
     
     # Soundex Normalization
     st.header("Soundex Normalization")
@@ -105,6 +119,8 @@ def main():
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(metaphone_text)
         st.download_button("Download Metaphone Text", data=metaphone_text, file_name=file_path, mime="text/plain")
+    
+  
 
 if __name__ == "__main__":
     main()
