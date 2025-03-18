@@ -93,7 +93,8 @@ def main():
         st.subheader(method_name)
         user_input = st.text_area(f"Enter text for {method_name}", "", key=method_name)
         if st.button(f"{method_name}", key=f"btn_{method_name}"):
-            st.markdown(f"### Output:\n\n**{method_func(user_input)}**")
+            st.markdown(f"<h2>Output:</h2><p style='font-size:24px; font-weight:bold;'>{method_func(user_input)}</p>", unsafe_allow_html=True)
+
 
 
     
